@@ -154,8 +154,8 @@
     const value = params.get(THEME_QUERY);
     if (value === null || value === DAILY || value === INTERVIEW) return;
     const url = new URL(window.location.href);
-    url.searchParams.set(THEME_QUERY, INTERVIEW);
-    window.history.replaceState({ ...(window.history.state || {}), theme: INTERVIEW }, '', url);
+    url.searchParams.set(THEME_QUERY, DAILY);
+    window.history.replaceState({ ...(window.history.state || {}), theme: DAILY }, '', url);
   };
 
   const observeDynamicLinks = () => {
@@ -173,13 +173,13 @@
 
   const initThemeController = () => {
     normalizeInvalidInitialQuery();
-    applyTheme(requestedTheme() || INTERVIEW);
+    applyTheme(requestedTheme() || DAILY);
     renderThemeSwitchers();
     syncInternalLinks();
     observeDynamicLinks();
 
     window.addEventListener('popstate', () => {
-      applyTheme(requestedTheme() || INTERVIEW);
+      applyTheme(requestedTheme() || DAILY);
       syncInternalLinks();
     });
   };
