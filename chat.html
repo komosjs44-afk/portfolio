@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <script>(()=>{const v=new URLSearchParams(location.search).get('theme');const t=v==='daily'?'daily':'interview';document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t==='interview'?'dark':'light'})()</script>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1d1a1f" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Chat — YI:ON</title>
+    <meta name="description" content="YI:ON과 대화하며 전이현의 프로젝트, 연구, 창업, 취향을 알아보세요." />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <script src="theme.js" defer></script>
+  </head>
+  <body data-page="chat" data-shell="stack">
+    <svg style="display: none">
+      <symbol id="icon-ribbon" viewBox="0 0 24 24">
+        <path d="M12 13.2c-1.6-2-4.6-3.6-7.4-3.1C2.7 10.5 1.6 12 2 13.4c.5 1.7 2.6 2.3 4.4 1.9 1.9-.4 3.9-1.3 5.6-2.1zm0 0c1.6-2 4.6-3.6 7.4-3.1 1.9.4 3 1.9 2.6 3.3-.5 1.7-2.6 2.3-4.4 1.9-1.9-.4-3.9-1.3-5.6-2.1zm0 0v7.4M10.6 20.6h2.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="icon-paw" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="16" rx="5" ry="4.2"/>
+        <ellipse cx="5.2" cy="9.6" rx="2" ry="2.4"/>
+        <ellipse cx="10.2" cy="6.4" rx="2" ry="2.6"/>
+        <ellipse cx="13.8" cy="6.4" rx="2" ry="2.6"/>
+        <ellipse cx="18.8" cy="9.6" rx="2" ry="2.4"/>
+      </symbol>
+      <symbol id="icon-star" viewBox="0 0 24 24">
+        <path d="M12 2.5l2.4 6.2 6.6.4-5.2 4.2 1.8 6.4L12 16.2l-5.6 3.5 1.8-6.4-5.2-4.2 6.6-.4z"/>
+      </symbol>
+      <symbol id="icon-heart" viewBox="0 0 24 24">
+        <path d="M12 20.2s-7.6-4.6-9.8-9.3C.6 7.4 2.4 4 5.9 3.6c2-.2 3.8.9 4.9 2.6 1.1-1.7 3-2.8 4.9-2.6 3.5.4 5.3 3.8 3.7 7.3-2.2 4.7-9.8 9.3-9.8 9.3z"/>
+      </symbol>
+      <symbol id="icon-cat-ears" viewBox="0 0 100 60">
+        <path d="M14 46 C14 22, 26 8, 34 26 Z"/>
+        <path d="M86 46 C86 22, 74 8, 66 26 Z"/>
+      </symbol>
+    </svg>
+
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <svg class="icon icon-ribbon" width="16" height="16"><use href="#icon-ribbon"/></svg>
+        YI:ON
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="about.html" data-nav="about">About</a>
+        <a href="projects.html" data-nav="projects">Projects</a>
+        <a href="journey.html" data-nav="journey">Journey</a>
+        <a href="research.html" data-nav="research">Research</a>
+        <a href="awards.html" data-nav="awards">Awards</a>
+        <a href="archive.html" data-nav="archive">Archive</a>
+        <a href="contact.html" data-nav="contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <main>
+      <!-- 데스크톱(900px 이상) 안내: 데스크톱 채팅은 Home 화면에 그대로 유지 -->
+      <div class="chat-desktop-note page-hero">
+        <p class="eyebrow">
+          <svg class="icon icon-heart" width="12" height="12"><use href="#icon-heart"/></svg>
+          Chat
+        </p>
+        <h1>채팅은 Home 화면에서 이용할 수 있어요</h1>
+        <p>데스크톱에서는 Home 오른쪽의 AI 채팅 패널을 그대로 사용해주세요. 이 페이지는 모바일 전체화면 Chat 전용입니다.</p>
+        <a class="btn btn-primary" href="index.html#chat" style="margin-top: 1.2rem; display: inline-flex">Home에서 채팅 열기</a>
+      </div>
+
+      <!-- 모바일/태블릿(900px 미만) 전체화면 Chat -->
+      <div class="chat-page" id="chatPage">
+        <header class="chat-topbar">
+          <button class="app-back-btn" id="chatBackBtn" type="button" aria-label="뒤로가기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="chat-topbar-info">
+            <span class="ai-avatar">YI</span>
+            <div>
+              <p class="chat-label">YI:ON Assistant</p>
+              <span class="status-pill-sm">Online</span>
+            </div>
+          </div>
+          <button class="chat-reset-btn" id="chatResetBtn" type="button" aria-label="대화 초기화">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+          </button>
+        </header>
+
+        <div class="visitor-mode-switch" role="group" aria-label="추천 질문 모드">
+          <button class="visitor-mode-option" type="button" data-visitor-mode="general" aria-pressed="true">나를 알아보기</button>
+          <button class="visitor-mode-option" type="button" data-visitor-mode="recruiter" aria-pressed="false">경력 중심으로 보기</button>
+        </div>
+
+        <div class="chat-suggested" id="chatSuggested">
+          <div class="chip-list" id="chipList" data-chat-recommendations data-limit="8">
+            <button class="chip" data-question="전이현은 어떤 사람인가요?">전이현은 어떤 사람인가요?</button>
+            <button class="chip" data-question="성격은 어떤가요?">성격은 어떤가요?</button>
+            <button class="chip" data-question="어떤 취향을 가지고 있나요?">어떤 취향을 가지고 있나요?</button>
+            <button class="chip" data-question="여행을 좋아하나요?">여행을 좋아하나요?</button>
+            <button class="chip" data-question="좋아하는 음악은?">좋아하는 음악은?</button>
+            <button class="chip" data-question="좋아하는 영화는?">좋아하는 영화는?</button>
+            <button class="chip" data-question="버킷리스트는?">버킷리스트는?</button>
+            <button class="chip" data-question="새로운 경험을 좋아하는 이유는?">새로운 경험을 좋아하는 이유는?</button>
+          </div>
+        </div>
+
+        <div class="chat-messages-wrap">
+          <div class="chat-messages" id="chatLog">
+            <div class="message ai-message reveal-in">
+              <p>
+                안녕하세요, 저는 YI:ON이에요.<br />
+                전이현의 프로젝트와 연구, 취향과 일상까지 대신 답해드려요.
+              </p>
+              <p>
+                무엇부터 물어볼까요?
+              </p>
+              <span class="source-tag">Profile</span>
+            </div>
+          </div>
+          <button class="chat-jump-latest" id="chatJumpLatest" type="button" hidden>↓ 최신 메시지</button>
+        </div>
+
+        <form class="chat-composer" id="chatForm">
+          <textarea id="chatInput" rows="1" placeholder="궁금한 걸 물어보세요…" autocomplete="off"></textarea>
+          <button type="submit" class="chat-send-btn" aria-label="질문 보내기">↑</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>© YI:ON</span>
+      <svg class="icon icon-heart" width="12" height="12"><use href="#icon-heart"/></svg>
+    </footer>
+
+    <nav class="app-tabbar" id="appTabbar" aria-label="주요 메뉴">
+      <a class="app-tab" data-tab="home" href="index.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="app-tab" data-tab="projects" href="projects.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+        <span>Projects</span>
+      </a>
+      <a class="app-tab" data-tab="chat" href="chat.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>Chat</span>
+      </a>
+      <a class="app-tab" data-tab="profile" href="about.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <script src="data/projects.js"></script>
+    <script src="data/papers.js"></script>
+    <script src="data/awards.js"></script>
+    <script src="data/activities.js"></script>
+    <script src="data/presentations.js"></script>
+    <script src="data/chat-engine.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

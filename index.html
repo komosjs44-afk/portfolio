@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <script>(()=>{const v=new URLSearchParams(location.search).get('theme');const t=v==='daily'?'daily':'interview';document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t==='interview'?'dark':'light'})()</script>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1d1a1f" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YI:ON — 전이현을 가장 잘 아는 AI</title>
+    <meta
+      name="description"
+      content="YI:ON은 전이현을 가장 잘 아는 AI입니다. 프로젝트, 연구, 해커톤, 창업, 취향과 성장 기록을 대화하며 알아가는 인터랙티브 포트폴리오 아카이브."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <script src="theme.js" defer></script>
+  </head>
+  <body data-page="home">
+    <!-- Kitty-core 아이콘 스프라이트: 캐릭터 없이 리본/발바닥/별/하트/고양이 귀 실루엣만 아주 작게 사용 -->
+    <svg style="display: none">
+      <symbol id="icon-ribbon" viewBox="0 0 24 24">
+        <path d="M12 13.2c-1.6-2-4.6-3.6-7.4-3.1C2.7 10.5 1.6 12 2 13.4c.5 1.7 2.6 2.3 4.4 1.9 1.9-.4 3.9-1.3 5.6-2.1zm0 0c1.6-2 4.6-3.6 7.4-3.1 1.9.4 3 1.9 2.6 3.3-.5 1.7-2.6 2.3-4.4 1.9-1.9-.4-3.9-1.3-5.6-2.1zm0 0v7.4M10.6 20.6h2.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="icon-paw" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="16" rx="5" ry="4.2"/>
+        <ellipse cx="5.2" cy="9.6" rx="2" ry="2.4"/>
+        <ellipse cx="10.2" cy="6.4" rx="2" ry="2.6"/>
+        <ellipse cx="13.8" cy="6.4" rx="2" ry="2.6"/>
+        <ellipse cx="18.8" cy="9.6" rx="2" ry="2.4"/>
+      </symbol>
+      <symbol id="icon-star" viewBox="0 0 24 24">
+        <path d="M12 2.5l2.4 6.2 6.6.4-5.2 4.2 1.8 6.4L12 16.2l-5.6 3.5 1.8-6.4-5.2-4.2 6.6-.4z"/>
+      </symbol>
+      <symbol id="icon-heart" viewBox="0 0 24 24">
+        <path d="M12 20.2s-7.6-4.6-9.8-9.3C.6 7.4 2.4 4 5.9 3.6c2-.2 3.8.9 4.9 2.6 1.1-1.7 3-2.8 4.9-2.6 3.5.4 5.3 3.8 3.7 7.3-2.2 4.7-9.8 9.3-9.8 9.3z"/>
+      </symbol>
+      <symbol id="icon-cat-ears" viewBox="0 0 100 60">
+        <path d="M14 46 C14 22, 26 8, 34 26 Z"/>
+        <path d="M86 46 C86 22, 74 8, 66 26 Z"/>
+      </symbol>
+    </svg>
+
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <svg class="icon icon-ribbon" width="16" height="16"><use href="#icon-ribbon"/></svg>
+        YI:ON
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="about.html" data-nav="about">About</a>
+        <a href="projects.html" data-nav="projects">Projects</a>
+        <a href="journey.html" data-nav="journey">Journey</a>
+        <a href="research.html" data-nav="research">Research</a>
+        <a href="awards.html" data-nav="awards">Awards</a>
+        <a href="archive.html" data-nav="archive">Archive</a>
+        <a href="contact.html" data-nav="contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-bg-grain" aria-hidden="true"></div>
+        <div class="hero-copy reveal">
+          <div class="profile-hero">
+            <div class="avatar-photo avatar-photo-sm" aria-hidden="true">
+              <svg class="cat-ears" viewBox="0 0 100 60" aria-hidden="true"><use href="#icon-cat-ears"/></svg>
+              <span>YI</span>
+            </div>
+            <div>
+              <p class="profile-hero-name">전이현</p>
+              <p class="profile-hero-desc">
+                AI·SW 전공 대학생<br />
+                IT PM · AI 서비스 기획·개발
+              </p>
+            </div>
+          </div>
+          <p class="eyebrow">
+            <svg class="icon icon-star" width="12" height="12"><use href="#icon-star"/></svg>
+            AI · SW DEVELOPER · PORTFOLIO
+          </p>
+          <h1 class="hero-text hero-statement">
+            프로젝트, 연구, 수상, 그리고 성장 과정을<br />
+            하나의 포트폴리오로 정리했습니다.
+          </h1>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="projects.html">대표 프로젝트 보기</a>
+            <a class="btn btn-secondary" href="#summary">전체 포트폴리오 둘러보기</a>
+          </div>
+        </div>
+
+        <div class="hero-panel reveal" id="chat">
+          <!-- 모바일 축약 Assistant 위젯: 데스크톱에서는 CSS로 항상 숨김 -->
+          <div class="assistant-widget" id="assistantWidget">
+            <div class="assistant-widget-head">
+              <span class="ai-avatar">YI</span>
+              <div>
+                <p class="chat-label">YI:ON Assistant</p>
+                <span class="status-pill-sm">Online</span>
+              </div>
+            </div>
+            <p class="assistant-widget-prompt">전이현의 프로젝트와 경험이 궁금한가요?</p>
+            <div class="visitor-mode-switch" role="group" aria-label="추천 질문 모드">
+              <button class="visitor-mode-option" type="button" data-visitor-mode="general" aria-pressed="true">나를 알아보기</button>
+              <button class="visitor-mode-option" type="button" data-visitor-mode="recruiter" aria-pressed="false">경력 중심으로 보기</button>
+            </div>
+            <div class="chip-list assistant-widget-chips" data-chat-recommendations data-limit="3" data-recommendation-links="chat">
+              <a class="chip" data-question="전이현은 어떤 사람인가요?" href="chat.html?q=%EC%A0%84%EC%9D%B4%ED%98%84%EC%9D%80%20%EC%96%B4%EB%96%A4%20%EC%82%AC%EB%9E%8C%EC%9D%B8%EA%B0%80%EC%9A%94%3F">전이현은 어떤 사람인가요?</a>
+              <a class="chip" data-question="성격은 어떤가요?" href="chat.html?q=%EC%84%B1%EA%B2%A9%EC%9D%80%20%EC%96%B4%EB%96%A4%EA%B0%80%EC%9A%94%3F">성격은 어떤가요?</a>
+              <a class="chip" data-question="어떤 취향을 가지고 있나요?" href="chat.html?q=%EC%96%B4%EB%96%A4%20%EC%B7%A8%ED%96%A5%EC%9D%84%20%EA%B0%80%EC%A7%80%EA%B3%A0%20%EC%9E%88%EB%82%98%EC%9A%94%3F">어떤 취향을 가지고 있나요?</a>
+            </div>
+            <a class="btn btn-primary assistant-widget-open" href="chat.html">전체 대화 열기</a>
+          </div>
+
+          <!-- 전체 채팅: 데스크톱은 항상 노출, 모바일은 "전체 대화 열기" 클릭 시 노출 -->
+          <div class="chat-full" id="chatFull">
+            <div class="chat-header">
+              <div class="chat-header-left">
+                <span class="ai-avatar">YI</span>
+                <div>
+                  <p class="chat-label">YI:ON</p>
+                  <h2>전이현의 이야기</h2>
+                </div>
+              </div>
+              <span class="status-pill">Online</span>
+            </div>
+
+            <div class="visitor-mode-switch" role="group" aria-label="추천 질문 모드">
+              <button class="visitor-mode-option" type="button" data-visitor-mode="general" aria-pressed="true">나를 알아보기</button>
+              <button class="visitor-mode-option" type="button" data-visitor-mode="recruiter" aria-pressed="false">경력 중심으로 보기</button>
+            </div>
+
+            <div class="chat-log" id="chatLog">
+              <div class="message ai-message reveal-in">
+                <p>
+                  반가워요 :)<br />
+                  프로젝트, 수상, 취향, 일상… 뭐든 편하게 물어보세요.
+                </p>
+                <p>
+                  무엇이 궁금한가요?
+                </p>
+                <span class="source-tag">Profile</span>
+              </div>
+            </div>
+
+            <div class="chip-list" id="chipList" data-chat-recommendations data-limit="8">
+              <button class="chip" data-question="전이현은 어떤 사람인가요?">전이현은 어떤 사람인가요?</button>
+              <button class="chip" data-question="성격은 어떤가요?">성격은 어떤가요?</button>
+              <button class="chip" data-question="어떤 취향을 가지고 있나요?">어떤 취향을 가지고 있나요?</button>
+              <button class="chip" data-question="여행을 좋아하나요?">여행을 좋아하나요?</button>
+              <button class="chip" data-question="좋아하는 음악은?">좋아하는 음악은?</button>
+              <button class="chip" data-question="좋아하는 영화는?">좋아하는 영화는?</button>
+              <button class="chip" data-question="버킷리스트는?">버킷리스트는?</button>
+              <button class="chip" data-question="새로운 경험을 좋아하는 이유는?">새로운 경험을 좋아하는 이유는?</button>
+            </div>
+
+            <form class="chat-form" id="chatForm">
+              <input id="chatInput" type="text" placeholder="궁금한 걸 물어보세요…" autocomplete="off" />
+              <button type="submit" aria-label="질문 보내기">↑</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="section summary-section" id="summary">
+        <div class="section-heading reveal">
+          <p class="eyebrow">
+            <svg class="icon icon-paw" width="12" height="12"><use href="#icon-paw"/></svg>
+            Portfolio Summary
+          </p>
+          <h2>숫자로 보는 포트폴리오</h2>
+        </div>
+        <div class="summary-grid reveal" id="summaryGrid"></div>
+      </section>
+
+      <!-- 모바일 전용: 대표 프로젝트 (데스크톱은 CSS로 숨김) -->
+      <section class="section mobile-only-section" id="homeFeatured">
+        <div class="section-heading">
+          <p class="eyebrow">
+            <svg class="icon icon-star" width="12" height="12"><use href="#icon-star"/></svg>
+            Featured
+          </p>
+          <h2>대표 프로젝트</h2>
+        </div>
+        <div class="card-grid-v2--scroll" id="homeFeaturedGrid"></div>
+        <a class="card-detail-link" href="projects.html" style="display:inline-block; margin-top:0.8rem">전체 프로젝트 보기 →</a>
+      </section>
+
+      <!-- 모바일 전용: Research/Awards/Journey 바로가기 -->
+      <section class="section mobile-only-section" id="homeQuickLinks">
+        <div class="section-heading">
+          <h2>더 알아보기</h2>
+        </div>
+        <div class="quicklink-grid">
+          <a class="quicklink-card" href="research.html">
+            <span class="quicklink-icon">📖</span>
+            <span>Research</span>
+            <span class="quicklink-sub" id="quickPapersSub"></span>
+          </a>
+          <a class="quicklink-card" href="awards.html">
+            <span class="quicklink-icon">🏆</span>
+            <span>Awards</span>
+            <span class="quicklink-sub" id="quickAwardsSub"></span>
+          </a>
+          <a class="quicklink-card" href="journey.html">
+            <span class="quicklink-icon">🧭</span>
+            <span>Journey</span>
+            <span class="quicklink-sub" id="quickJourneySub"></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 모바일 전용: 외부 링크바 -->
+      <section class="section mobile-only-section" id="homeLinks">
+        <div class="link-row link-row-center">
+          <a class="link-chip" href="https://github.com/komosjs44-afk?tab=repositories" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="link-chip" href="https://instagram.com/hyooiner" target="_blank" rel="noreferrer">Instagram</a>
+          <a class="link-chip" href="mailto:komosjs44@hs.ac.kr">Email</a>
+        </div>
+      </section>
+
+      <section class="section mood-section" id="mood">
+        <div class="section-heading reveal">
+          <p class="eyebrow">
+            <svg class="icon icon-heart" width="12" height="12"><use href="#icon-heart"/></svg>
+            Mood
+          </p>
+        </div>
+        <div class="mood-grid">
+          <div class="mood-card reveal"><span class="mood-emoji">🐈</span>Cat</div>
+          <div class="mood-card reveal"><span class="mood-emoji">☕</span>Coffee</div>
+          <div class="mood-card reveal"><span class="mood-emoji">🎧</span>Music</div>
+          <div class="mood-card reveal"><span class="mood-emoji">🏃</span>Running</div>
+          <div class="mood-card reveal"><span class="mood-emoji">✈️</span>Travel</div>
+          <div class="mood-card reveal"><span class="mood-emoji">💻</span>Building</div>
+          <div class="mood-card reveal"><span class="mood-emoji">🤍</span>Minimal</div>
+          <div class="mood-card reveal"><span class="mood-emoji">🎀</span>Pink</div>
+          <div class="mood-card reveal"><span class="mood-emoji">📖</span>Research</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© YI:ON</span>
+      <svg class="icon icon-heart" width="12" height="12"><use href="#icon-heart"/></svg>
+    </footer>
+
+    <nav class="app-tabbar" id="appTabbar" aria-label="주요 메뉴">
+      <a class="app-tab" data-tab="home" href="index.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="app-tab" data-tab="projects" href="projects.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+        <span>Projects</span>
+      </a>
+      <a class="app-tab" data-tab="chat" href="chat.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>Chat</span>
+      </a>
+      <a class="app-tab" data-tab="profile" href="about.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <script src="data/projects.js"></script>
+    <script src="data/papers.js"></script>
+    <script src="data/awards.js"></script>
+    <script src="data/activities.js"></script>
+    <script src="data/presentations.js"></script>
+    <script src="data/chat-engine.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

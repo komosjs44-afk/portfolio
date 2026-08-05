@@ -1,0 +1,429 @@
+:root,
+html[data-theme='daily'] {
+  --color-bg: #fffcfa;
+  --color-surface: #fbf2e9;
+  --color-card: #fffcfa;
+  --color-card-elevated: #ffffff;
+  --color-card-hover: #f3dee2;
+  --color-neutral: #e9e4df;
+  --color-text: #221e1c;
+  --color-text-secondary: #6e6560;
+  --color-text-muted: #8b817c;
+  --color-accent: #d98fa0;
+  --color-accent-hover: #b96e82;
+  --color-accent-soft: #f3dee2;
+  --color-border: #ece2da;
+  --color-border-strong: #dfd6d0;
+  --color-header: rgba(255, 252, 250, 0.78);
+  --color-shadow: rgba(34, 30, 28, 0.08);
+  --color-shadow-soft: rgba(34, 30, 28, 0.06);
+  --color-focus: #9f4f68;
+  --color-accent-text: #96536a;
+  --color-on-accent: #4a1e2c;
+  --color-page-glow: transparent;
+  --color-overlay-subtle: rgba(34, 30, 28, 0.04);
+  --color-overlay-border: rgba(34, 30, 28, 0.1);
+  --color-focus-ring: rgba(159, 79, 104, 0.42);
+  --color-raised-shadow: rgba(34, 30, 28, 0.12);
+  --color-border-hover: #b9ada7;
+  --color-featured-text: #96536a;
+  --color-featured-border: rgba(185, 110, 130, 0.3);
+  --color-tabbar: rgba(255, 252, 250, 0.94);
+  --color-chat-input: rgba(255, 252, 250, 0.96);
+  color-scheme: light;
+}
+
+html[data-theme='interview'] {
+  --color-bg: #1d1a1f;
+  --color-surface: #262228;
+  --color-card: #302b31;
+  --color-card-elevated: #39333a;
+  --color-card-hover: #39333a;
+  --color-neutral: #353036;
+  --color-text: #f6f2ed;
+  --color-text-secondary: #c7bcb8;
+  --color-text-muted: #a79d9e;
+  --color-accent: #cf8fa0;
+  --color-accent-hover: #d99eaf;
+  --color-accent-soft: rgba(207, 143, 160, 0.14);
+  --color-border: #454046;
+  --color-border-strong: #625b63;
+  --color-header: rgba(29, 26, 31, 0.9);
+  --color-shadow: rgba(0, 0, 0, 0.32);
+  --color-shadow-soft: rgba(0, 0, 0, 0.22);
+  --color-focus: #e4a7b8;
+  --color-accent-text: #d99eaf;
+  --color-on-accent: #1d1a1f;
+  --color-page-glow: rgba(207, 143, 160, 0.055);
+  --color-overlay-subtle: rgba(255, 255, 255, 0.05);
+  --color-overlay-border: rgba(255, 255, 255, 0.1);
+  --color-focus-ring: rgba(207, 143, 160, 0.42);
+  --color-raised-shadow: rgba(0, 0, 0, 0.24);
+  --color-border-hover: #777078;
+  --color-featured-text: #edbac7;
+  --color-featured-border: rgba(207, 143, 160, 0.3);
+  --color-tabbar: rgba(29, 26, 31, 0.94);
+  --color-chat-input: rgba(13, 11, 14, 0.88);
+  --warm-white: var(--color-bg);
+  --cream: var(--color-surface);
+  --gray-soft: var(--color-neutral);
+  --pink-soft: var(--color-accent-soft);
+  --rose: var(--color-accent);
+  --rose-deep: var(--color-accent-hover);
+  --ink: var(--color-text);
+  --ink-muted: var(--color-text-secondary);
+  --border: var(--color-border);
+  --shadow: 0 20px 45px var(--color-shadow);
+  --shadow-soft: 0 10px 26px var(--color-shadow-soft);
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+html[data-theme='daily'] :is(
+    .brand,
+    .eyebrow,
+    .nav-links a[aria-current='page'],
+    .app-tab[aria-current='page'],
+    .card-detail-link,
+    .highlight
+  ) {
+  color: var(--color-accent-text);
+}
+
+html[data-theme='daily'] .btn-primary {
+  color: var(--color-on-accent);
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  flex: 0 0 auto;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-text);
+  transition: transform 180ms ease;
+}
+
+.theme-toggle:hover {
+  background: var(--color-accent-soft);
+  transform: scale(1.03);
+}
+
+.theme-toggle:active {
+  transform: scale(0.96);
+}
+
+.theme-toggle:active .theme-toggle-icon {
+  transform: rotate(90deg);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.theme-toggle--header {
+  margin-left: auto;
+}
+
+:is(
+    .profile-hero-desc,
+    .profile-intro,
+    .interest-card p,
+    .project-card-v2 p,
+    .page-hero p,
+    .section-lead
+  ) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.project-name {
+  white-space: nowrap;
+}
+
+.app-backbar .theme-toggle {
+  margin-left: auto;
+}
+
+.theme-toggle--chat {
+  display: none;
+}
+
+html[data-theme='interview'] .theme-toggle {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme='interview'] .theme-toggle:hover {
+  background: rgba(207, 143, 160, 0.1);
+}
+
+.app-backbar-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html[data-theme='interview'] body {
+  background:
+    radial-gradient(circle at 12% 0%, var(--color-page-glow), transparent 31rem),
+    var(--color-bg);
+}
+
+html[data-theme='interview'] .site-header,
+html[data-theme='interview'] .app-backbar,
+html[data-theme='interview'] .chat-topbar {
+  background: var(--color-header);
+  border-color: var(--color-overlay-border);
+}
+
+html[data-theme='interview'] .brand,
+html[data-theme='interview'] .eyebrow,
+html[data-theme='interview'] .nav-links a[aria-current='page'],
+html[data-theme='interview'] .app-tab[aria-current='page'] {
+  color: var(--color-accent-hover);
+}
+
+html[data-theme='interview'] .nav-links a {
+  color: var(--color-text-secondary);
+}
+
+html[data-theme='interview'] .nav-links a:hover {
+  color: var(--color-text);
+}
+
+html[data-theme='interview'] .hero-bg-grain {
+  opacity: 0.2;
+  filter: grayscale(1);
+}
+
+html[data-theme='interview'] .profile-hero,
+html[data-theme='interview'] .page-hero,
+html[data-theme='interview'] .section-heading,
+html[data-theme='interview'] .hero-text {
+  color: var(--color-text-secondary);
+}
+
+html[data-theme='interview'] .avatar-photo,
+html[data-theme='interview'] .profile-avatar,
+html[data-theme='interview'] .profile-photo {
+  border-color: var(--color-card-elevated);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+html[data-theme='interview'] .btn-primary,
+html[data-theme='interview'] .chat-send,
+html[data-theme='interview'] .assistant-widget-open {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: 0 12px 26px var(--color-raised-shadow);
+}
+
+html[data-theme='interview'] .btn-primary:hover,
+html[data-theme='interview'] .chat-send:hover {
+  background: var(--color-accent-hover);
+}
+
+html[data-theme='interview'] .btn-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+html[data-theme='interview'] .btn-secondary:hover {
+  background: var(--color-overlay-subtle);
+  border-color: var(--color-border-hover);
+}
+
+html[data-theme='interview'] :is(
+    .hero-panel,
+    .assistant-widget,
+    .chat-full,
+    .chat-shell,
+    .summary-card,
+    .project-card-v2,
+    .card-v2,
+    .paper-card,
+    .award-card,
+    .journey-card,
+    .archive-entry-card,
+    .interest-card,
+    .quicklink-card,
+    .mood-card,
+    .contact-card,
+    .detail-section,
+    .ig-profile,
+    .profile-card,
+    .lightbox-content
+  ) {
+  background: var(--color-card);
+  color: var(--color-text);
+  border-color: var(--color-overlay-border);
+  box-shadow: 0 10px 30px var(--color-shadow-soft);
+}
+
+html[data-theme='interview'] :is(
+    .project-card-v2,
+    .card-v2,
+    .paper-card,
+    .award-card,
+    .journey-card,
+    .archive-entry-card,
+    .interest-card,
+    .quicklink-card
+  ):hover {
+  background: var(--color-card-hover);
+  border-color: var(--color-border-strong);
+}
+
+html[data-theme='interview'] :is(
+    .chat-message,
+    .assistant-message,
+    .chat-bubble,
+    .chat-input-wrap,
+    .chat-composer,
+    .archive-search,
+    input,
+    textarea,
+    select
+  ) {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+html[data-theme='interview'] .ai-message {
+  background: var(--color-card-elevated);
+  color: var(--color-text);
+  border-color: var(--color-overlay-border);
+}
+
+html[data-theme='interview'] :is(input, textarea, select)::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+html[data-theme='interview'] :is(
+    .chip,
+    .link-chip,
+    .filter-chip,
+    .tag,
+    .badge,
+    .status-badge,
+    .tech-chip,
+    .visitor-mode-button
+  ) {
+  background: var(--color-overlay-subtle);
+  color: var(--color-text-secondary);
+  border-color: var(--color-overlay-border);
+}
+
+html[data-theme='interview'] :is(
+    .filter-chip.active,
+    .filter-chip[aria-pressed='true'],
+    .visitor-mode-button[aria-pressed='true'],
+    .status-badge.featured,
+    .badge.featured
+  ) {
+  background: var(--color-accent-soft);
+  color: var(--color-featured-text);
+  border-color: var(--color-featured-border);
+}
+
+html[data-theme='interview'] :is(
+    .summary-number,
+    .stat-number,
+    .card-detail-link,
+    .highlight,
+    .text-link
+  ) {
+  color: var(--color-accent-hover);
+}
+
+html[data-theme='interview'] :is(
+    .muted,
+    .card-meta,
+    .project-meta,
+    .project-card-v2 p,
+    .paper-card p,
+    .award-card p,
+    .journey-card p,
+    .archive-entry-card p,
+    .profile-hero-desc,
+    .quicklink-sub,
+    .section-lead
+  ) {
+  color: var(--color-text-secondary);
+}
+
+html[data-theme='interview'] .user-message,
+html[data-theme='interview'] .message-user {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+html[data-theme='interview'] .app-tabbar {
+  background: var(--color-tabbar);
+  border-top-color: var(--color-overlay-border);
+}
+
+html[data-theme='interview'] .app-tab {
+  color: var(--color-text-muted);
+}
+
+html[data-theme='interview'] footer,
+html[data-theme='interview'] .site-footer {
+  color: var(--color-text-muted);
+  border-color: var(--color-overlay-border);
+}
+
+html[data-theme='interview'] .lightbox,
+html[data-theme='interview'] .modal-backdrop {
+  background: var(--color-chat-input);
+}
+
+html[data-theme='interview'] :is(a, button, input, textarea, select):focus-visible {
+  outline-color: var(--color-focus);
+}
+
+@media (max-width: 899px) {
+  .link-chip {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .theme-toggle--chat {
+    display: inline-flex;
+    align-self: flex-end;
+    margin: 0.5rem 1.25rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle,
+  .theme-toggle-icon {
+    transition: none;
+  }
+}
