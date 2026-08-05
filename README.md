@@ -10,7 +10,7 @@ python -m http.server 8080
 ```
 
 접속: <http://localhost:8080>
-
+배포 URL : https://komosjs44-afk.github.io/portfolio/
 ## 구성
 
 - `index.html`, `about.html`, `projects.html`, `journey.html`, `research.html`, `awards.html`, `archive.html`, `contact.html`, `chat.html` — 페이지
