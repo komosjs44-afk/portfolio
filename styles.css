@@ -1028,9 +1028,8 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
-  /* grid item(.hero)이 nowrap 칩 등 내부 콘텐츠의 min-content 너비만큼
-     억지로 넓어지지 않도록 축소를 허용 — 대신 .chip-list의 overflow-x:auto가
-     카드 내부에서만 가로 스크롤을 담당하게 한다. */
+  /* grid item(.hero)이 내부 콘텐츠의 min-content 너비만큼 억지로 넓어지지
+     않도록 축소를 허용한다. */
   min-width: 0;
 }
 
@@ -1074,63 +1073,6 @@ a {
   font-size: 1.08rem;
 }
 
-.visitor-mode-switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.25rem;
-  margin: 0 0 0.75rem;
-  padding: 0.25rem;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--cream);
-}
-
-.visitor-mode-option {
-  min-width: 0;
-  min-height: var(--touch-min);
-  padding: 0.5rem 0.75rem;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--ink-muted);
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 700;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.visitor-mode-option[aria-pressed='true'] {
-  border-color: var(--rose);
-  background: var(--warm-white);
-  color: var(--rose-deep);
-  box-shadow: var(--shadow-soft);
-}
-
-.visitor-mode-option:focus-visible {
-  outline: 2px solid var(--rose-deep);
-  outline-offset: 2px;
-}
-
-@media (hover: hover) {
-  .visitor-mode-option:not([aria-pressed='true']):hover {
-    background: var(--pink-soft);
-    color: var(--ink);
-  }
-}
-
-@media (max-width: 430px) {
-  .visitor-mode-option {
-    padding-inline: 0.25rem;
-    font-size: 0.75rem;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-  }
-}
-
 .status-pill {
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
@@ -1138,16 +1080,6 @@ a {
   color: var(--rose-deep);
   font-size: 0.78rem;
   font-weight: 700;
-}
-
-.chat-log {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  min-height: 240px;
-  max-height: 360px;
-  overflow-y: auto;
-  padding: 0.4rem 0.25rem 0.9rem;
 }
 
 .message {
@@ -1173,6 +1105,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(6px);
   border-bottom-left-radius: 6px;
+  box-shadow: var(--shadow-soft);
 }
 
 .user-message {
@@ -1184,80 +1117,15 @@ a {
 
 .source-tag {
   display: inline-block;
-  font-size: 0.68rem;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   color: var(--rose-deep);
-  background: rgba(217, 143, 160, 0.14);
-  padding: 0.18rem 0.5rem;
+  background: rgba(217, 143, 160, 0.18);
+  border: 1px solid rgba(217, 143, 160, 0.3);
+  padding: 0.22rem 0.6rem;
   border-radius: 999px;
-}
-
-.chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.9rem 0 1rem;
-}
-
-.chip {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 999px;
-  padding: 0.45rem 0.85rem;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.86rem;
-  color: var(--ink);
-  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-}
-
-.chip:hover {
-  background: var(--pink-soft);
-  border-color: var(--rose);
-  transform: translateY(-1px);
-}
-
-.chip-followup {
-  font-size: 0.8rem;
-  padding: 0.4rem 0.75rem;
-}
-
-.chat-form {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.chat-form input {
-  flex: 1;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.8rem 1.1rem;
-  font: inherit;
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.chat-form input:focus {
-  outline: none;
-  border-color: var(--rose);
-}
-
-.chat-form button {
-  border: none;
-  border-radius: 999px;
-  width: 46px;
-  height: 46px;
-  background: var(--rose);
-  color: white;
-  font-weight: 700;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.chat-form button:hover {
-  background: var(--rose-deep);
-  transform: translateY(-1px);
 }
 
 /* ---------- Sections shared ---------- */
@@ -1802,17 +1670,6 @@ main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .chip-list {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 0.3rem;
-  }
-
-  .chat-form {
-    position: sticky;
-    bottom: 0.4rem;
-  }
-
   .ig-profile-left {
     flex-direction: column;
   }
@@ -1901,7 +1758,7 @@ main {
 /* 터치 기기 tap 피드백(hover 불가 환경에서만) */
 @media (hover: none) {
   .app-tab:active,
-  .chip:active,
+  .chat-entry-card:active,
   .btn:active,
   .card-detail-link:active,
   .project-card-v2:active,
@@ -1947,23 +1804,6 @@ main {
   display: none;
 }
 
-/* 데스크톱(900px 이상)에서는 축약 위젯을 숨기고 기존 전체 채팅만 노출 */
-.assistant-widget {
-  display: none;
-}
-
-.assistant-widget-open {
-  width: 100%;
-  min-height: 48px;
-}
-
-.assistant-widget-head {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 0.8rem;
-}
-
 .status-pill-sm {
   display: inline-block;
   margin-top: 0.2rem;
@@ -1982,16 +1822,56 @@ main {
   overflow-wrap: anywhere;
 }
 
-.chat-desktop-note > p:not(.eyebrow) {
+/* About/Career 진입 링크 카드 — index.html 히어로 패널과 chat.html 랜딩 페이지가 공유 */
+.chat-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.chat-entry-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  min-height: var(--touch-min);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.chat-entry-card:hover {
+  background: var(--pink-soft);
+  border-color: var(--rose);
+  transform: translateY(-1px);
+}
+
+.chat-entry-card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--rose-deep);
+}
+
+.chat-entry-card-desc {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
 
-/* 640px 이하에서 .chip-list가 nowrap+가로스크롤로 바뀌는데, white-space가 없으면
-   칩이 줄어들며 텍스트가 여러 줄로 눌려 보이는 문제가 있어 방지한다. */
-.assistant-widget-chips .chip {
-  white-space: nowrap;
-  flex-shrink: 0;
+@media (max-width: 430px) {
+  .chat-entry-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* chat.html(선택 랜딩)에서는 다른 인테리어 페이지처럼 .page-hero와 같은 폭으로 정렬 */
+body[data-page='chat'] .chat-entry-grid {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
 }
 
 .card-grid-v2--scroll {
@@ -2045,40 +1925,6 @@ main {
   .mobile-only-section {
     display: block;
   }
-
-  .assistant-widget {
-    display: block;
-  }
-
-  .assistant-widget.hidden {
-    display: none;
-  }
-
-  .chat-full {
-    display: none;
-  }
-
-  .chat-full.expanded {
-    display: block;
-  }
-}
-
-/* ================================================================
-   Chat 전체화면 페이지 (chat.html)
-   ================================================================ */
-
-body[data-page='chat'] main {
-  padding: 0;
-}
-
-.chat-desktop-note {
-  display: none;
-}
-
-@media (min-width: 900px) {
-  .chat-desktop-note {
-    display: block;
-  }
 }
 
 .chat-page {
@@ -2088,7 +1934,7 @@ body[data-page='chat'] main {
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  /* 하단 고정 탭바에 composer가 가려지지 않도록 그만큼 여백 확보 */
+  /* 하단 고정 탭바에 composer가 가려지지 않도록 그만큼 여백 확보(모바일) */
   padding-bottom: calc(var(--tabbar-height) + var(--safe-bottom));
 }
 
@@ -2097,20 +1943,38 @@ body.keyboard-open .chat-page {
   padding-bottom: var(--safe-bottom);
 }
 
-@media (max-width: 899px) {
-  .chat-page {
-    display: flex;
-  }
+/* About/Career는 모바일·데스크톱 모든 너비에서 항상 전체화면 채팅 UI로 노출된다
+   (더 이상 Home 화면 인라인 채팅으로 대체되지 않음). */
+body[data-page='chat-about'] .chat-page,
+body[data-page='chat-career'] .chat-page {
+  display: flex;
+}
 
-  body[data-page='chat'] {
+@media (max-width: 899px) {
+  body[data-page='chat-about'],
+  body[data-page='chat-career'] {
     overflow: hidden;
     height: 100vh;
     height: 100dvh;
     padding-bottom: 0;
   }
 
-  body[data-page='chat'] .site-footer {
+  body[data-page='chat-about'] .site-footer,
+  body[data-page='chat-career'] .site-footer {
     display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  body[data-page='chat-about'] .chat-page,
+  body[data-page='chat-career'] .chat-page {
+    max-width: 760px;
+    height: 78vh;
+    margin: 2rem auto;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
+    padding-bottom: 0;
   }
 }
 
@@ -2136,11 +2000,6 @@ body.keyboard-open .chat-page {
   margin: 0;
 }
 
-.chat-page > .visitor-mode-switch {
-  flex-shrink: 0;
-  margin: 0.6rem var(--space-page-x) 0;
-}
-
 .chat-reset-btn {
   display: flex;
   align-items: center;
@@ -2154,22 +2013,83 @@ body.keyboard-open .chat-page {
   flex-shrink: 0;
 }
 
-.chat-suggested {
+.mode-switch-anim {
+  animation: modeSwitchIn 200ms ease;
+}
+
+@keyframes modeSwitchIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-switch-anim {
+    animation: none;
+  }
+}
+
+/* Hero: 채팅 로그와 분리된, 항상 보이는 영역. 모드를 바꾸면 이 안의 텍스트만
+   교체된다(대화 자체는 절대 건드리지 않음). */
+.chat-hero {
   flex-shrink: 0;
-  padding: 0.6rem var(--space-page-x) 0.7rem;
+  padding: 0.7rem var(--space-page-x) 0.5rem;
   border-bottom: 1px solid var(--border);
 }
 
-.chat-suggested .chip-list {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  margin: 0;
-  padding-bottom: 0.2rem;
+.chat-hero-message {
+  margin: 0 0 0.5rem;
 }
 
-.chat-page .chip {
-  min-height: var(--touch-min);
-  white-space: nowrap;
+.chat-hero-message p:last-child {
+  margin-bottom: 0;
+}
+
+/* Hint Chip: 텍스트 링크 정도의 존재감 — 배경/테두리 없이 살짝 강조만, 한 번에 하나만 보여준다 */
+.chat-hint-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  background: none;
+  padding: 0.3rem 0.1rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+  cursor: pointer;
+  min-height: 32px;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.chat-hint-chip.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+}
+
+/* AI 답변 다음에 오는 단일 후속 질문 제안 — 칩이 아니라 한 줄짜리 텍스트 링크 */
+.chat-followup-suggestion {
+  display: block;
+  margin-top: 0.55rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+  text-align: left;
+  cursor: pointer;
+}
+
+.chat-followup-suggestion::before {
+  content: '💬 ';
 }
 
 .chat-messages-wrap {

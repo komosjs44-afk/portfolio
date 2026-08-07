@@ -22,7 +22,10 @@ for (const file of ['data/projects.js', 'data/papers.js', 'data/awards.js', 'dat
 
 const script = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 const registryStart = script.indexOf('  const KNOWLEDGE_CATEGORY_BY_TAG = {');
-const visitorUiStart = script.indexOf('  function getVisitorMode()');
+// About/Career 페이지 분리 리팩터링으로 index.html 전용 방문자 모드 토글 코드
+// (getVisitorMode 등)는 제거되었다. findAnswer 등록 직후가 KNOWLEDGE_REGISTRY
+// 블록의 새로운 끝 경계다.
+const visitorUiStart = script.indexOf('  window.findAnswer = findAnswer;');
 const registrySource =
   'const featuredSlugs=[];\n' +
   script.slice(registryStart, visitorUiStart) +
@@ -150,10 +153,13 @@ for (const question of ['수상 경력을 알려줘', '논문과 연구 경험�
 storage.clear();
 assert.equal(ask('성격은 어떤가요?').dataStatus, 'SUPPORTED');
 const stateBeforeSwitch = engine.loadConversationState();
+assert.equal(stateBeforeSwitch.recentMessages.length, 2);
 engine.setVisitorMode('recruiter');
 const recruiterState = engine.loadConversationState();
 assert.equal(recruiterState.visitorMode, 'recruiter');
-assert.equal(recruiterState.recentMessages.length, stateBeforeSwitch.recentMessages.length);
+// general/recruiter는 완전히 분리된 상태를 가진다(각 모드가 독립된 대화 세션처럼
+// 동작해야 하므로) — general에 쌓인 기록이 recruiter로 전환했다고 넘어오지 않는다.
+assert.equal(recruiterState.recentMessages.length, 0);
 assert.equal(ask('대표 프로젝트를 보여줘').dataStatus, 'SUPPORTED');
 engine.setVisitorMode('general');
 assert.equal(engine.loadConversationState().visitorMode, 'general');
@@ -171,10 +177,12 @@ engine.resetConversationState();
 engine.setVisitorMode('recruiter');
 ask('Context Bridge가 뭐야?');
 const stateWithEntity = engine.loadConversationState();
+assert.equal(stateWithEntity.currentEntity, 'context-bridge');
 engine.setVisitorMode('general');
 const stateAfterModeSwitch = engine.loadConversationState();
-assert.equal(stateAfterModeSwitch.currentEntity, stateWithEntity.currentEntity);
-assert.equal(stateAfterModeSwitch.recentMessages.length, stateWithEntity.recentMessages.length);
+// general 슬롯은 recruiter에서 쌓은 entity·기록과 완전히 독립적이다.
+assert.equal(stateAfterModeSwitch.currentEntity, null);
+assert.equal(stateAfterModeSwitch.recentMessages.length, 0);
 engine.setVisitorMode('recruiter');
 const resetState = engine.resetConversationState();
 assert.equal(resetState.visitorMode, 'recruiter');

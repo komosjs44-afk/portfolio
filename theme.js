@@ -142,9 +142,10 @@
       backbar.append(createThemeSwitcher('backbar'));
     }
 
+    // 다크/라이트 전환 버튼은 채팅 상단바 안, 초기화 버튼 바로 옆(가장 바깥쪽)에 둔다.
     const chatTopbar = document.querySelector('.chat-topbar');
     if (chatTopbar && !document.querySelector('.theme-toggle--chat')) {
-      chatTopbar.insertAdjacentElement('afterend', createThemeSwitcher('chat'));
+      chatTopbar.append(createThemeSwitcher('chat'));
     }
     syncSwitcherState(currentTheme());
   };

@@ -93,74 +93,26 @@
         </div>
 
         <div class="hero-panel reveal" id="chat">
-          <!-- 모바일 축약 Assistant 위젯: 데스크톱에서는 CSS로 항상 숨김 -->
-          <div class="assistant-widget" id="assistantWidget">
-            <div class="assistant-widget-head">
+          <div class="chat-header">
+            <div class="chat-header-left">
               <span class="ai-avatar">YI</span>
               <div>
-                <p class="chat-label">YI:ON Assistant</p>
-                <span class="status-pill-sm">Online</span>
+                <p class="chat-label">YI:ON</p>
+                <h2>전이현의 이야기</h2>
               </div>
             </div>
-            <p class="assistant-widget-prompt">전이현의 프로젝트와 경험이 궁금한가요?</p>
-            <div class="visitor-mode-switch" role="group" aria-label="추천 질문 모드">
-              <button class="visitor-mode-option" type="button" data-visitor-mode="general" aria-pressed="true">나를 알아보기</button>
-              <button class="visitor-mode-option" type="button" data-visitor-mode="recruiter" aria-pressed="false">경력 중심으로 보기</button>
-            </div>
-            <div class="chip-list assistant-widget-chips" data-chat-recommendations data-limit="3" data-recommendation-links="chat">
-              <a class="chip" data-question="전이현은 어떤 사람인가요?" href="chat.html?q=%EC%A0%84%EC%9D%B4%ED%98%84%EC%9D%80%20%EC%96%B4%EB%96%A4%20%EC%82%AC%EB%9E%8C%EC%9D%B8%EA%B0%80%EC%9A%94%3F">전이현은 어떤 사람인가요?</a>
-              <a class="chip" data-question="성격은 어떤가요?" href="chat.html?q=%EC%84%B1%EA%B2%A9%EC%9D%80%20%EC%96%B4%EB%96%A4%EA%B0%80%EC%9A%94%3F">성격은 어떤가요?</a>
-              <a class="chip" data-question="어떤 취향을 가지고 있나요?" href="chat.html?q=%EC%96%B4%EB%96%A4%20%EC%B7%A8%ED%96%A5%EC%9D%84%20%EA%B0%80%EC%A7%80%EA%B3%A0%20%EC%9E%88%EB%82%98%EC%9A%94%3F">어떤 취향을 가지고 있나요?</a>
-            </div>
-            <a class="btn btn-primary assistant-widget-open" href="chat.html">전체 대화 열기</a>
+            <span class="status-pill">Online</span>
           </div>
-
-          <!-- 전체 채팅: 데스크톱은 항상 노출, 모바일은 "전체 대화 열기" 클릭 시 노출 -->
-          <div class="chat-full" id="chatFull">
-            <div class="chat-header">
-              <div class="chat-header-left">
-                <span class="ai-avatar">YI</span>
-                <div>
-                  <p class="chat-label">YI:ON</p>
-                  <h2>전이현의 이야기</h2>
-                </div>
-              </div>
-              <span class="status-pill">Online</span>
-            </div>
-
-            <div class="visitor-mode-switch" role="group" aria-label="추천 질문 모드">
-              <button class="visitor-mode-option" type="button" data-visitor-mode="general" aria-pressed="true">나를 알아보기</button>
-              <button class="visitor-mode-option" type="button" data-visitor-mode="recruiter" aria-pressed="false">경력 중심으로 보기</button>
-            </div>
-
-            <div class="chat-log" id="chatLog">
-              <div class="message ai-message reveal-in">
-                <p>
-                  반가워요 :)<br />
-                  프로젝트, 수상, 취향, 일상… 뭐든 편하게 물어보세요.
-                </p>
-                <p>
-                  무엇이 궁금한가요?
-                </p>
-                <span class="source-tag">Profile</span>
-              </div>
-            </div>
-
-            <div class="chip-list" id="chipList" data-chat-recommendations data-limit="8">
-              <button class="chip" data-question="전이현은 어떤 사람인가요?">전이현은 어떤 사람인가요?</button>
-              <button class="chip" data-question="성격은 어떤가요?">성격은 어떤가요?</button>
-              <button class="chip" data-question="어떤 취향을 가지고 있나요?">어떤 취향을 가지고 있나요?</button>
-              <button class="chip" data-question="여행을 좋아하나요?">여행을 좋아하나요?</button>
-              <button class="chip" data-question="좋아하는 음악은?">좋아하는 음악은?</button>
-              <button class="chip" data-question="좋아하는 영화는?">좋아하는 영화는?</button>
-              <button class="chip" data-question="버킷리스트는?">버킷리스트는?</button>
-              <button class="chip" data-question="새로운 경험을 좋아하는 이유는?">새로운 경험을 좋아하는 이유는?</button>
-            </div>
-
-            <form class="chat-form" id="chatForm">
-              <input id="chatInput" type="text" placeholder="궁금한 걸 물어보세요…" autocomplete="off" />
-              <button type="submit" aria-label="질문 보내기">↑</button>
-            </form>
+          <p class="assistant-widget-prompt">전이현에 대해 궁금한 걸 편하게 물어보세요. 두 가지 방향으로 들려드려요.</p>
+          <div class="chat-entry-grid">
+            <a class="chat-entry-card" href="chat-about.html">
+              <span class="chat-entry-card-title">나를 알아보기</span>
+              <span class="chat-entry-card-desc">취향, 성격, 가치관과 일상 이야기</span>
+            </a>
+            <a class="chat-entry-card" href="chat-career.html">
+              <span class="chat-entry-card-title">경력 중심으로 보기</span>
+              <span class="chat-entry-card-desc">프로젝트, 기술 경험, 수상과 연구 활동</span>
+            </a>
           </div>
         </div>
       </section>

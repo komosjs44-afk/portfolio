@@ -166,7 +166,8 @@ html[data-theme='daily'] .btn-primary {
 }
 
 .theme-toggle--chat {
-  display: none;
+  display: inline-flex;
+  margin-left: 0.4rem;
 }
 
 html[data-theme='interview'] .theme-toggle {
@@ -412,12 +413,6 @@ html[data-theme='interview'] :is(a, button, input, textarea, select):focus-visib
     display: inline-flex;
     min-height: 44px;
     align-items: center;
-  }
-
-  .theme-toggle--chat {
-    display: inline-flex;
-    align-self: flex-end;
-    margin: 0.5rem 1.25rem 0;
   }
 }
 

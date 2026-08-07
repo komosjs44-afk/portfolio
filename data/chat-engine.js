@@ -123,6 +123,17 @@
     };
   }
 
+  // 모드별로 currentEntity/currentIntent/recentMessages를 독립적으로 보관한다.
+  // general/recruiter는 서로 다른 대화 세션처럼 동작해야 하므로, 저장소 자체를
+  // { visitorMode, modes: { general: ModeState, recruiter: ModeState } } 형태로 이원화한다.
+  function createModeState() {
+    return { currentCategory: null, currentEntity: null, currentIntent: null, recentMessages: [] };
+  }
+
+  function createInitialStorageState() {
+    return { visitorMode: 'general', modes: { general: createModeState(), recruiter: createModeState() } };
+  }
+
   function getStorage() {
     try {
       return global.localStorage || null;
@@ -153,58 +164,108 @@
       .slice(-MAX_RECENT_MESSAGES);
   }
 
-  function loadConversationState() {
+  function sanitizeModeState(value) {
+    const source = value && typeof value === 'object' ? value : {};
+    return {
+      currentCategory: sanitizeNullableString(source.currentCategory),
+      currentEntity: sanitizeNullableString(source.currentEntity),
+      currentIntent: sanitizeNullableString(source.currentIntent),
+      recentMessages: sanitizeRecentMessages(source.recentMessages),
+    };
+  }
+
+  function loadStorageState() {
     const storage = getStorage();
-    if (!storage) return createInitialConversationState();
+    if (!storage) return createInitialStorageState();
 
     try {
       const raw = storage.getItem(CHAT_STATE_KEY);
-      if (!raw) return createInitialConversationState();
+      if (!raw) return createInitialStorageState();
       const parsed = JSON.parse(raw);
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
         throw new Error('Invalid conversation state');
       }
 
+      const visitorMode = sanitizeVisitorMode(parsed.visitorMode);
+      const modesSource = parsed.modes && typeof parsed.modes === 'object' ? parsed.modes : null;
+      // 구버전(모드 분리 이전) 저장값 호환: 최상위에 currentEntity 등이 있었다면
+      // 그 값을 현재 visitorMode의 상태로 이전해서 기존 세션이 끊기지 않게 한다.
+      const legacyModeState =
+        !modesSource && (parsed.currentEntity !== undefined || parsed.recentMessages !== undefined)
+          ? sanitizeModeState(parsed)
+          : null;
+
       return {
-        visitorMode: sanitizeVisitorMode(parsed.visitorMode),
-        currentCategory: sanitizeNullableString(parsed.currentCategory),
-        currentEntity: sanitizeNullableString(parsed.currentEntity),
-        currentIntent: sanitizeNullableString(parsed.currentIntent),
-        recentMessages: sanitizeRecentMessages(parsed.recentMessages),
+        visitorMode,
+        modes: {
+          general: sanitizeModeState(
+            (modesSource && modesSource.general) || (visitorMode === 'general' ? legacyModeState : null)
+          ),
+          recruiter: sanitizeModeState(
+            (modesSource && modesSource.recruiter) || (visitorMode === 'recruiter' ? legacyModeState : null)
+          ),
+        },
       };
     } catch (error) {
       try {
         storage.removeItem(CHAT_STATE_KEY);
       } catch (storageError) {}
-      return createInitialConversationState();
+      return createInitialStorageState();
     }
   }
 
-  function saveConversationState(state) {
-    const nextState = {
-      visitorMode: sanitizeVisitorMode(state && state.visitorMode),
-      currentCategory: sanitizeNullableString(state && state.currentCategory),
-      currentEntity: sanitizeNullableString(state && state.currentEntity),
-      currentIntent: sanitizeNullableString(state && state.currentIntent),
-      recentMessages: sanitizeRecentMessages(state && state.recentMessages),
+  function saveStorageState(storageState) {
+    const source = storageState || createInitialStorageState();
+    const visitorMode = sanitizeVisitorMode(source.visitorMode);
+    const next = {
+      visitorMode,
+      modes: {
+        general: sanitizeModeState(source.modes && source.modes.general),
+        recruiter: sanitizeModeState(source.modes && source.modes.recruiter),
+      },
     };
     const storage = getStorage();
-    if (!storage) return nextState;
+    if (storage) {
+      try {
+        storage.setItem(CHAT_STATE_KEY, JSON.stringify(next));
+      } catch (error) {}
+    }
+    return next;
+  }
 
-    try {
-      storage.setItem(CHAT_STATE_KEY, JSON.stringify(nextState));
-    } catch (error) {}
-    return nextState;
+  // 아래 4개 함수는 기존 호출부(runChatPipeline, script.js)와의 계약을 그대로 유지한다:
+  // "현재 활성 모드"의 상태만 다루는 flat ConversationState 모양을 주고받는다.
+  // 실제 분리 저장은 loadStorageState/saveStorageState가 내부적으로 처리한다.
+  function loadConversationState() {
+    const storageState = loadStorageState();
+    return { visitorMode: storageState.visitorMode, ...storageState.modes[storageState.visitorMode] };
+  }
+
+  function saveConversationState(state) {
+    const storageState = loadStorageState();
+    const visitorMode = state && VISITOR_MODES.has(state.visitorMode) ? state.visitorMode : storageState.visitorMode;
+    const modeState = sanitizeModeState(state);
+    const nextStorageState = saveStorageState({
+      visitorMode,
+      modes: { ...storageState.modes, [visitorMode]: modeState },
+    });
+    return { visitorMode, ...nextStorageState.modes[visitorMode] };
   }
 
   function resetConversationState() {
-    const visitorMode = loadConversationState().visitorMode;
-    return saveConversationState({ ...createInitialConversationState(), visitorMode });
+    const storageState = loadStorageState();
+    const nextStorageState = saveStorageState({
+      ...storageState,
+      modes: { ...storageState.modes, [storageState.visitorMode]: createModeState() },
+    });
+    return { visitorMode: storageState.visitorMode, ...nextStorageState.modes[storageState.visitorMode] };
   }
 
   function setVisitorMode(visitorMode) {
-    const state = loadConversationState();
-    return saveConversationState({ ...state, visitorMode: sanitizeVisitorMode(visitorMode) });
+    const storageState = loadStorageState();
+    const nextVisitorMode = sanitizeVisitorMode(visitorMode);
+    const nextStorageState = saveStorageState({ ...storageState, visitorMode: nextVisitorMode });
+    return { visitorMode: nextVisitorMode, ...nextStorageState.modes[nextVisitorMode] };
   }
 
   function appendRecentMessage(state, message) {

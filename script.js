@@ -185,7 +185,7 @@ function observeReveal(el) {
   }
   window.scrollChatToBottom = scrollChatToBottom;
 
-  function addMessage({ text, role = 'user', tag, followups, projectSlugs }) {
+  function addMessage({ text, role = 'user', tag, followups, projectSlugs, redirectHref, redirectLabel }) {
     const message = document.createElement('div');
     message.className = `message ${role === 'user' ? 'user-message' : 'ai-message'} reveal-in`;
 
@@ -202,6 +202,15 @@ function observeReveal(el) {
       message.appendChild(tagEl);
     }
 
+    // 다른 채팅 페이지(About/Career) 범위의 질문에 대한 안내 + 이동 링크.
+    if (redirectHref && redirectLabel) {
+      const link = document.createElement('a');
+      link.className = 'chat-followup-suggestion';
+      link.href = redirectHref;
+      link.textContent = redirectLabel;
+      message.appendChild(link);
+    }
+
     if (projectSlugs && projectSlugs.length) {
       const cardWrap = document.createElement('div');
       cardWrap.style.marginTop = '0.7rem';
@@ -216,18 +225,14 @@ function observeReveal(el) {
       message.appendChild(cardWrap);
     }
 
+    // 여러 개의 추천 칩 대신, 다음 대화로 자연스럽게 이어지는 한 문장만 제안한다.
     if (followups && followups.length) {
-      const followWrap = document.createElement('div');
-      followWrap.className = 'chip-list';
-      followups.forEach((q) => {
-        const chip = document.createElement('button');
-        chip.className = 'chip chip-followup';
-        chip.type = 'button';
-        chip.dataset.question = q;
-        chip.textContent = q;
-        followWrap.appendChild(chip);
-      });
-      message.appendChild(followWrap);
+      const suggestion = document.createElement('button');
+      suggestion.type = 'button';
+      suggestion.className = 'chat-followup-suggestion';
+      suggestion.dataset.question = followups[0];
+      suggestion.textContent = followups[0];
+      message.appendChild(suggestion);
     }
 
     const wasNearBottom = isChatNearBottom();
@@ -695,65 +700,14 @@ function observeReveal(el) {
       followups: ['성격은 어떤가요?', '협업 스타일은?'],
     };
   }
-
-  function getVisitorMode() {
-    return window.YIONChatEngine
-      ? window.YIONChatEngine.loadConversationState().visitorMode
-      : 'general';
-  }
-
-  function syncVisitorModeControls() {
-    const visitorMode = getVisitorMode();
-    document.querySelectorAll('.visitor-mode-option').forEach((button) => {
-      button.setAttribute('aria-pressed', String(button.dataset.visitorMode === visitorMode));
-    });
-  }
-
-  function renderVisitorModeRecommendations() {
-    if (!window.YIONChatEngine) return;
-    const visitorMode = getVisitorMode();
-    const recommendationOptions = { fallbackResolver: findAnswer };
-
-    document.querySelectorAll('[data-chat-recommendations]').forEach((container) => {
-      const limit = Number(container.dataset.limit) || 8;
-      const questions = window.YIONChatEngine.getInitialRecommendations(
-        visitorMode,
-        recommendationOptions,
-        limit
-      );
-      const useLinks = container.dataset.recommendationLinks === 'chat';
-      container.replaceChildren();
-
-      questions.forEach((question) => {
-        const chip = document.createElement(useLinks ? 'a' : 'button');
-        chip.className = 'chip';
-        chip.dataset.question = question;
-        chip.textContent = question;
-        if (useLinks) chip.href = `chat.html?q=${encodeURIComponent(question)}`;
-        else chip.type = 'button';
-        container.appendChild(chip);
-      });
-    });
-
-    syncVisitorModeControls();
-  }
-
-  document.querySelectorAll('.visitor-mode-option').forEach((button) => {
-    button.addEventListener('click', () => {
-      if (!window.YIONChatEngine) return;
-      window.YIONChatEngine.setVisitorMode(button.dataset.visitorMode);
-      renderVisitorModeRecommendations();
-    });
-  });
-  window.refreshVisitorModeRecommendations = renderVisitorModeRecommendations;
-  renderVisitorModeRecommendations();
+  window.findAnswer = findAnswer;
 
   function ask(question) {
     addMessage({ text: question, role: 'user' });
     const result = window.YIONChatEngine
       ? window.YIONChatEngine.runChatPipeline(question, { fallbackResolver: findAnswer })
       : null;
-    const answer = result
+    let answer = result
       ? {
           text: result.answer,
           tag: result.tag,
@@ -762,6 +716,10 @@ function observeReveal(el) {
           scrollTo: result.scrollTo,
         }
       : findAnswer(question);
+    // About/Career 페이지 전용 범위 필터(있을 때만 적용) — data/chat-shell.js가 주입.
+    if (result && typeof window.applyChatScope === 'function') {
+      answer = window.applyChatScope(result, answer) || answer;
+    }
     setTimeout(() => {
       addMessage({
         text: answer.text,
@@ -769,6 +727,8 @@ function observeReveal(el) {
         tag: answer.tag,
         followups: answer.followups,
         projectSlugs: answer.projectSlugs,
+        redirectHref: answer.redirectHref,
+        redirectLabel: answer.redirectLabel,
       });
       if (answer.scrollTo) {
         window.location.href = answer.scrollTo;
@@ -786,7 +746,7 @@ function observeReveal(el) {
   });
 
   document.addEventListener('click', (event) => {
-    const chip = event.target.closest('.chip');
+    const chip = event.target.closest('.chip, .chat-followup-suggestion');
     if (!chip || chip.matches('a[href]') || !chip.dataset.question) return;
     ask(chip.dataset.question);
   });
@@ -1449,6 +1409,8 @@ const TAB_ACTIVE_MAP = {
   home: 'home',
   projects: 'projects',
   chat: 'chat',
+  'chat-about': 'chat',
+  'chat-career': 'chat',
   about: 'profile',
   journey: 'profile',
   research: 'profile',
@@ -1632,152 +1594,5 @@ const TAB_ACTIVE_MAP = {
 })();
 
 // ---------- Chat 전체화면 페이지(chat.html 전용) ----------
-(function initChatPage() {
-  const chatPage = qs('chatPage');
-  if (!chatPage) return;
-
-  const chatLog = qs('chatLog');
-  const chatForm = qs('chatForm');
-  const chatInput = qs('chatInput');
-  const chatSuggested = qs('chatSuggested');
-  const jumpBtn = qs('chatJumpLatest');
-  const resetBtn = qs('chatResetBtn');
-  const backBtn = qs('chatBackBtn');
-
-  const STORAGE_KEY = 'yion_chat_history_v1';
-  const MAX_HISTORY = 30;
-  let history = [];
-  let restoring = false;
-
-  // ---- 뒤로가기 ----
-  if (backBtn) {
-    backBtn.addEventListener('click', () => {
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.location.href = 'index.html';
-      }
-    });
-  }
-
-  // ---- sessionStorage 저장/복원 ----
-  function loadHistory() {
-    try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
-      sessionStorage.removeItem(STORAGE_KEY);
-      return [];
-    }
-  }
-
-  function saveHistory() {
-    try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_HISTORY)));
-    } catch (e) {
-      /* 저장 공간 제한(프라이빗 모드 등)은 무시하고 진행 */
-    }
-  }
-
-  function hideSuggestedIfConversationStarted() {
-    if (chatSuggested && chatLog.querySelectorAll('.message').length > 1) {
-      chatSuggested.hidden = true;
-    }
-  }
-
-  window.onChatMessageAdded = function (msg) {
-    if (!restoring) {
-      history.push(msg);
-      saveHistory();
-    }
-    hideSuggestedIfConversationStarted();
-  };
-
-  history = loadHistory();
-  if (history.length && typeof window.renderChatMessage === 'function') {
-    restoring = true;
-    history.forEach((msg) => window.renderChatMessage(msg));
-    restoring = false;
-    hideSuggestedIfConversationStarted();
-    if (typeof window.scrollChatToBottom === 'function') window.scrollChatToBottom(false);
-  }
-
-  // ---- 대화 초기화 ----
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      sessionStorage.removeItem(STORAGE_KEY);
-      if (window.YIONChatEngine) window.YIONChatEngine.resetConversationState();
-      history = [];
-      chatLog.querySelectorAll('.message').forEach((m, i) => {
-        if (i > 0) m.remove();
-      });
-      if (chatSuggested) chatSuggested.hidden = false;
-      if (jumpBtn) jumpBtn.hidden = true;
-      if (typeof window.refreshVisitorModeRecommendations === 'function') {
-        window.refreshVisitorModeRecommendations();
-      }
-    });
-  }
-
-  // ---- 최신 메시지로 이동 ----
-  if (jumpBtn) {
-    jumpBtn.addEventListener('click', () => {
-      if (typeof window.scrollChatToBottom === 'function') window.scrollChatToBottom(true);
-    });
-  }
-
-  // ---- textarea 자동 높이 조절(최대 높이까지만) ----
-  if (chatInput && chatInput.tagName === 'TEXTAREA') {
-    const resizeInput = () => {
-      chatInput.style.height = 'auto';
-      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-    };
-    chatInput.addEventListener('input', resizeInput);
-    if (chatForm) {
-      chatForm.addEventListener('submit', () => {
-        setTimeout(resizeInput, 0);
-      });
-    }
-  }
-
-  // ---- URL ?q= 로 넘어온 질문 자동 실행(Home 위젯에서 진입 시) ----
-  const params = new URLSearchParams(window.location.search);
-  const initialQuestion = params.get('q');
-  if (initialQuestion && typeof window.askChatQuestion === 'function') {
-    setTimeout(() => window.askChatQuestion(initialQuestion), 300);
-  }
-
-  // ---- 모바일 키보드 대응: visualViewport 우선, innerHeight 폴백 ----
-  function applyHeight(px) {
-    chatPage.style.height = px + 'px';
-  }
-
-  function handleViewportChange() {
-    const vv = window.visualViewport;
-    if (vv) {
-      applyHeight(vv.height);
-      const keyboardOpen = window.innerHeight - vv.height > 120;
-      document.body.classList.toggle('keyboard-open', keyboardOpen);
-    } else {
-      applyHeight(window.innerHeight);
-    }
-    if (typeof window.scrollChatToBottom === 'function' && isChatLikelyNearBottomOnResize()) {
-      window.scrollChatToBottom(false);
-    }
-  }
-
-  function isChatLikelyNearBottomOnResize() {
-    if (!chatLog) return false;
-    return chatLog.scrollHeight - chatLog.scrollTop - chatLog.clientHeight < 160;
-  }
-
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', handleViewportChange);
-    window.visualViewport.addEventListener('scroll', handleViewportChange);
-  } else {
-    window.addEventListener('resize', handleViewportChange);
-  }
-  handleViewportChange();
-})();
+// About/Career 채팅 페이지 전용 셸(Hero/Hint/기록/키보드 대응)은
+// data/chat-shell.js의 window.initYionChatShell()로 분리되었다.
