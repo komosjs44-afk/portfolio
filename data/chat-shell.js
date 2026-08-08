@@ -28,6 +28,7 @@
     const jumpBtn = document.getElementById('chatJumpLatest');
     const resetBtn = document.getElementById('chatResetBtn');
     const backBtn = document.getElementById('chatBackBtn');
+    const chatHero = document.getElementById('chatHero');
     const heroMessage = document.getElementById('chatHeroMessage');
     const hintChip = document.getElementById('chatHintChip');
     const hintText = document.getElementById('chatHintText');
@@ -75,6 +76,14 @@
         heroMessage.classList.add('mode-switch-anim');
       }
       heroMessage.innerHTML = heroLines.map((line) => `<p>${line}</p>`).join('');
+    }
+
+    // 대화가 시작되기 전(첫 화면)에만 인사말+힌트 칩을 보여준다. 첫 메시지가
+    // 오가는 순간부터는 이 영역이 항상 같은 자리를 차지하고 있을 뿐 스크롤로도
+    // 사라지지 않으므로, 대화 로그가 전체 공간을 쓰도록 아예 감춘다.
+    function setHeroVisible(visible) {
+      if (!chatHero) return;
+      chatHero.hidden = !visible;
     }
 
     // ---- Hint Chip: 힌트 1개만, 은은하게 순환(여러 개를 동시에 보여주지 않는다) ----
@@ -164,6 +173,7 @@
 
     global.onChatMessageAdded = function (msg) {
       if (!restoring) {
+        if (!history.length) setHeroVisible(false);
         history.push(msg);
         saveHistory();
       }
@@ -173,6 +183,7 @@
     renderHero({ animate: false });
     startHintRotation();
     history = loadHistory();
+    setHeroVisible(!history.length);
     if (history.length && typeof global.renderChatMessage === 'function') {
       restoring = true;
       history.forEach((msg) => global.renderChatMessage(msg));
@@ -192,6 +203,7 @@
         chatLog.querySelectorAll('.message').forEach((m) => m.remove());
         if (jumpBtn) jumpBtn.hidden = true;
         renderHero();
+        setHeroVisible(true);
       });
     }
 
