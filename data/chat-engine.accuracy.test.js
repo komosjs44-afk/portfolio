@@ -211,7 +211,10 @@ engine.resetConversationState();
 assert.equal(ask('맡은 역할은?').dataStatus, 'MISSING_ENTITY');
 engine.resetConversationState();
 ask('Context Bridge가 뭐야?');
-assert.equal(ask('왜 만들었어?').dataStatus, 'MISSING_DATA');
+// data/projects.js에 별도 motivation 필드가 없어 problem을 동기 답변으로
+// 재사용하도록 바뀜(chat-engine.js toProjectData) — Context Bridge는 problem이
+// 채워져 있으므로 "왜 만들었어?"에 이제 실제로 답할 수 있다(의도된 동작 변경).
+assert.equal(ask('왜 만들었어?').dataStatus, 'SUPPORTED');
 
 if (process.argv.includes('--verbose')) console.table(observedCases);
 

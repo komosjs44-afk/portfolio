@@ -825,7 +825,7 @@ function observeReveal(el) {
       body = `
         <h4>${project.title}</h4>
         <p>${project.summary}</p>
-        <p class="card-meta">${project.period}${project.roles.length ? ' · ' + project.roles.join(', ') : ''}</p>
+        <p class="card-meta">${[project.period, project.roles.length ? project.roles.join(', ') : ''].filter(Boolean).join(' · ')}</p>
         <div class="badge-row">${statusBadgesHtml(project.status)}</div>
         ${project.techStack.length ? `<p class="card-meta">${project.techStack.join(' · ')}</p>` : ''}
         <span class="card-detail-link">상세보기 →</span>`;
@@ -987,74 +987,24 @@ function journeyStepsHtml(journey) {
     pCoverEl.style.backgroundPosition = 'center';
   }
 
-  const metaItems = [
-    ['기간', project.period],
-    ['역할', project.roles.join(', ')],
-    ['기술 스택', project.techStack.join(', ') || '-'],
-    ['분류', project.category.join(', ')],
-  ];
-  if (project.teamSize) metaItems.push(['팀 구성', `${project.teamSize}인`]);
+  const metaItems = [];
+  if (project.period) metaItems.push(['기간', project.period]);
+  metaItems.push(['역할', project.roles.join(', ')]);
+  metaItems.push(['기술 스택', project.techStack.join(', ') || '-']);
+  if (project.highlights && project.highlights.length) {
+    metaItems.push(['대표 성과', project.highlights.join(', ')]);
+  }
+  if (project.githubUrl) {
+    metaItems.push([
+      'GitHub',
+      `<a class="link-chip" href="${project.githubUrl}" target="_blank" rel="noreferrer">GitHub 보기 →</a>`,
+    ]);
+  }
   qs('pMeta').innerHTML = metaItems.map(([k, v]) => `<li><strong>${k}</strong>${v}</li>`).join('');
 
-  function listOrEmpty(id, arr, emptyText) {
-    const el = qs(id);
-    if (!el) return;
-    el.innerHTML = arr && arr.length ? arr.map((t) => `<li>${t}</li>`).join('') : `<li style="color:var(--ink-muted)">${emptyText}</li>`;
-  }
-
-  listOrEmpty('pProblem', project.problem, '아직 정리되지 않았어요 (업데이트 예정)');
-  listOrEmpty('pSolution', project.solution, '아직 정리되지 않았어요 (업데이트 예정)');
-  listOrEmpty('pImplementation', project.implementation, '아직 정리되지 않았어요 (업데이트 예정)');
-
-  qs('pRoles').innerHTML =
-    project.roles.map((r) => `<span class="status-badge is-muted">${r}</span>`).join('') ||
-    '<span style="color:var(--ink-muted)">-</span>';
-
-  const challengesEl = qs('pChallenges');
-  if (project.challenges && project.challenges.length) {
-    challengesEl.innerHTML = project.challenges
-      .map(
-        (c) => `
-        <div class="challenge-card">
-          <div><b>Challenge</b> ${c.challenge}</div>
-          <div><b>Cause</b> ${c.cause}</div>
-          <div><b>Decision</b> ${c.decision}</div>
-          <div><b>Action</b> ${c.action}</div>
-          <div><b>Outcome</b> ${c.outcome}</div>
-        </div>`
-      )
-      .join('');
-  } else {
-    challengesEl.innerHTML = '<p style="color:var(--ink-muted)">아직 정리된 챌린지가 없어요.</p>';
-  }
-
-  const results = project.results || {};
-  function resultCol(title, arr) {
-    return `
-      <div class="result-col">
-        <h4>${title}</h4>
-        <ul>${(arr && arr.length ? arr : ['-']).map((t) => `<li>${t}</li>`).join('')}</ul>
-      </div>`;
-  }
-  qs('pResults').innerHTML =
-    resultCol('Implemented', results.implemented) + resultCol('In Progress', results.inProgress) + resultCol('Planned', results.planned);
-
-  qs('pJourney').innerHTML = journeyStepsHtml(project.journey);
-
-  const learnings = project.learnings || {};
-  function learningBlock(title, content) {
-    const body = Array.isArray(content)
-      ? content.length
-        ? `<ul>${content.map((t) => `<li>${t}</li>`).join('')}</ul>`
-        : '<p style="color:var(--ink-muted); margin:0">-</p>'
-      : `<p style="margin:0">${content || '-'}</p>`;
-    return `<div class="learning-block"><h4>${title}</h4>${body}</div>`;
-  }
-  qs('pLearnings').innerHTML =
-    learningBlock('Product', learnings.product) +
-    learningBlock('Technical', learnings.technical) +
-    learningBlock('Collaboration', learnings.collaboration) +
-    learningBlock('If I started again', learnings.restart);
+  // Problem/Solution/My Role(뱃지)/Implementation/Challenges/Result/Journey/
+  // Learnings 상세 서술은 화면에서 제거(콘텐츠 단순화). 데이터 자체(project.problem
+  // 등)는 data/projects.js에 그대로 남아있어 Chat과 다른 페이지는 영향 없음.
 
   const presentation = getRelatedPresentation(project.slug);
   if (presentation && presentation.presentationUrl) {
@@ -1085,11 +1035,6 @@ function journeyStepsHtml(journey) {
     qs('pEvidenceEmpty').textContent = '아직 등록된 증거 자료가 없어요. 준비되는 대로 채워질 예정이에요.';
   }
 
-  const links = buildProjectLinks(project);
-  qs('pLinks').innerHTML = links.length
-    ? linkChipsHtml(links)
-    : '<p style="color:var(--ink-muted); font-size:0.88rem">아직 연결된 외부 링크가 없어요.</p>';
-
   document.querySelectorAll('#project-detail .reveal, .page-hero.reveal').forEach(observeReveal);
 })();
 
@@ -1110,26 +1055,51 @@ function journeyStepsHtml(journey) {
   container.querySelectorAll('.reveal').forEach(observeReveal);
 })();
 
+// "한신대학교 (추정)" -> {shown:'한신대학교', hint:''}
+// "(추정 · 주최기관 확인 필요)" -> {shown:'', hint:'주최기관 확인 필요'}
+// 데이터 값 자체는 바꾸지 않고, 확정된 부분과 확인 필요 부분을 분리해서
+// 확정된 부분만 카드 첫 화면에, 확인 필요한 부분은 별도 각주로 보여준다.
+// Awards/Research 페이지가 공유하는 유틸이라 모듈 스코프에 둔다.
+function splitVerification(text) {
+  const raw = String(text || '').trim();
+  if (!raw) return { shown: '', hint: '' };
+  const m = raw.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+  if (!m) return { shown: raw, hint: '' };
+  const shown = m[1].trim();
+  const hint = m[2]
+    .replace(/^추정\s*(?:[·,]\s*)?/, '')
+    .trim();
+  return { shown, hint };
+}
+
 // ---------- Research page ----------
 (function renderResearchPage() {
   const grid = qs('paperGrid');
   if (!grid) return;
-  grid.innerHTML = PAPERS.map(
-    (paper) => `
+  grid.innerHTML = PAPERS.map((paper) => {
+    const titleInfo = splitVerification(paper.title);
+    const authorsInfo = splitVerification(paper.authors);
+    const venueInfo = splitVerification(paper.venue);
+    const yearInfo = splitVerification(paper.year);
+    const title = titleInfo.shown || paper.title;
+    const metaParts = [authorsInfo.shown, venueInfo.shown, yearInfo.shown].filter(Boolean);
+    const hints = [titleInfo.hint, authorsInfo.hint, venueInfo.hint, yearInfo.hint].filter(Boolean);
+    return `
     <article class="paper-card reveal">
-      <div class="paper-cover">${paper.title}</div>
+      <div class="paper-cover">${title}</div>
       <div class="paper-body">
-        <h4>${paper.title}</h4>
-        <p class="paper-meta">${paper.authors} · ${paper.venue} · ${paper.year}</p>
+        <h4>${title}</h4>
+        ${metaParts.length ? `<p class="paper-meta">${metaParts.join(' · ')}</p>` : ''}
         <span class="status-badge">${paper.status}</span>
         <p>${paper.summary}</p>
+        ${hints.length ? `<p class="paper-meta">확인 중: ${hints.join(' · ')}</p>` : ''}
         <div class="link-row">
           ${paper.projectUrl ? `<a class="link-chip" href="${paper.projectUrl}">관련 프로젝트</a>` : ''}
           ${paper.paperUrl ? `<a class="link-chip" href="${paper.paperUrl}" target="_blank" rel="noreferrer">논문 보기</a>` : ''}
         </div>
       </div>
-    </article>`
-  ).join('');
+    </article>`;
+  }).join('');
   grid.querySelectorAll('.reveal').forEach(observeReveal);
 })();
 
@@ -1137,22 +1107,6 @@ function journeyStepsHtml(journey) {
 (function renderAwardsPage() {
   const grid = qs('awardGrid');
   if (!grid) return;
-
-  // "한신대학교 (추정)" -> {shown:'한신대학교', hint:''}
-  // "(추정 · 주최기관 확인 필요)" -> {shown:'', hint:'주최기관 확인 필요'}
-  // 데이터 값 자체는 바꾸지 않고, 확정된 부분과 확인 필요 부분을 분리해서
-  // 확정된 부분만 카드 첫 화면(제목 바로 아래)에 노출한다.
-  function splitVerification(text) {
-    const raw = String(text || '').trim();
-    if (!raw) return { shown: '', hint: '' };
-    const m = raw.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
-    if (!m) return { shown: raw, hint: '' };
-    const shown = m[1].trim();
-    const hint = m[2]
-      .replace(/^추정\s*(?:[·,]\s*)?/, '')
-      .trim();
-    return { shown, hint };
-  }
 
   grid.innerHTML = AWARDS.map((award, i) => {
     const orgInfo = splitVerification(award.org);
@@ -1216,7 +1170,7 @@ function journeyStepsHtml(journey) {
     items.push({
       type: 'paper',
       typeLabel: 'Research',
-      title: p.title,
+      title: splitVerification(p.title).shown || p.title,
       summary: p.summary,
       status: [p.status],
       year: extractYear(p.year),
@@ -1556,14 +1510,16 @@ const TAB_ACTIVE_MAP = {
   const researchEl = qs('profileResearch');
   if (researchEl) {
     researchEl.innerHTML = `<div class="mini-card-list">${PAPERS.slice(0, 2)
-      .map(
-        (p) => `
+      .map((p) => {
+        const title = splitVerification(p.title).shown || p.title;
+        const venue = splitVerification(p.venue).shown;
+        return `
         <a class="mini-card" href="research.html">
-          <h3>${p.title}</h3>
-          <p>${p.venue}</p>
+          <h3>${title}</h3>
+          ${venue ? `<p>${venue}</p>` : ''}
           <div class="badge-row"><span class="status-badge">${p.status}</span></div>
-        </a>`
-      )
+        </a>`;
+      })
       .join('')}</div>`;
   }
 
@@ -1571,13 +1527,19 @@ const TAB_ACTIVE_MAP = {
   const journeyEl = qs('profileJourney');
   if (journeyEl) {
     journeyEl.innerHTML = `<div class="mini-card-list">${ACTIVITIES.slice(0, 3)
-      .map(
-        (a) => `
+      .map((a) => {
+        // "(진행 중)"처럼 실제 정보를 담은 괄호는 그대로 두고, "(추정 · 업데이트
+        // 예정)" 류의 미확정 placeholder만 splitVerification으로 감춘다.
+        const period = /추정|확인 필요|업데이트 예정/.test(a.period || '')
+          ? splitVerification(a.period).shown
+          : a.period || '';
+        const line = [period, a.summary].filter(Boolean).join(' · ');
+        return `
         <a class="mini-card" href="journey.html">
           <h3>${a.title}</h3>
-          <p>${a.period} · ${a.summary}</p>
-        </a>`
-      )
+          <p>${line}</p>
+        </a>`;
+      })
       .join('')}</div>`;
   }
 })();

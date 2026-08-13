@@ -86,7 +86,7 @@
     stack: ['techStack'],
     challenge: ['challenges', 'solutions'],
     solution: ['solutions'],
-    result: ['results', 'awards'],
+    result: ['results', 'awards', 'highlights'],
     status: ['status'],
   };
   const FOLLOW_UP_MAP = {
@@ -400,7 +400,9 @@
       aliases: project.aliases || [],
       summary: project.summary,
       problem: project.problem,
-      motivation: project.motivation,
+      // data/projects.js에 별도 motivation 필드가 없어, 문제 정의(problem)를
+      // "왜 만들었는가"에 대한 답으로 재사용한다(데이터를 새로 만들지 않음).
+      motivation: project.problem,
       role: project.roles || [],
       contributions: project.implementation || [],
       techStack: project.techStack || [],
@@ -408,6 +410,7 @@
       solutions: project.solution || [],
       results: project.results,
       status: project.status || [],
+      highlights: project.highlights || [],
       awards: getRelatedTitles(typeof AWARDS === 'undefined' ? [] : AWARDS, project.slug),
       papers: getRelatedTitles(typeof PAPERS === 'undefined' ? [] : PAPERS, project.slug),
       completeness: project.completeness || 'draft',
@@ -532,8 +535,10 @@
   function buildResultAnswer(project) {
     const results = joinItems(flattenResults(project.results), 6);
     const awards = joinItems(project.awards, 3);
-    if (!results && !awards) return buildMissingDataAnswer(project, 'result');
+    const highlights = joinItems(project.highlights, 4);
+    if (!results && !awards && !highlights) return buildMissingDataAnswer(project, 'result');
     const lines = [];
+    if (highlights) lines.push(`${project.name}의 대표 성과는 다음과 같아요: ${highlights}.`);
     if (results) lines.push(`${project.name}에서 확인된 결과는 다음과 같아요: ${results}.`);
     if (awards) lines.push(`관련 수상은 다음과 같아요: ${awards}.`);
     return lines.join('\n');
