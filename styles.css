@@ -821,37 +821,6 @@ a {
   background: linear-gradient(150deg, #e3d6d9 0%, #b9a1a8 60%, #766a68 100%);
 }
 
-/* ---------- Contact phone reveal ---------- */
-
-.phone-reveal-btn {
-  border: 1px solid var(--border);
-  background: var(--cream);
-  border-radius: 999px;
-  padding: 0.65rem 1.1rem;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.phone-reveal-btn:hover {
-  background: var(--pink-soft);
-  border-color: var(--rose);
-}
-
-.phone-value {
-  display: none;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--rose-deep);
-  margin-top: 0.6rem;
-}
-
-.phone-value.shown {
-  display: block;
-}
-
 /* ---------- Reveal animation ---------- */
 
 .reveal {

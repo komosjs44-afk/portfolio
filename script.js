@@ -1544,17 +1544,6 @@ const TAB_ACTIVE_MAP = {
   }
 })();
 
-// ---------- Contact phone reveal ----------
-(function initPhoneReveal() {
-  const btn = qs('phoneRevealBtn');
-  const value = qs('phoneValue');
-  if (!btn || !value) return;
-  btn.addEventListener('click', () => {
-    const shown = value.classList.toggle('shown');
-    btn.textContent = shown ? '연락처 숨기기' : '연락처 보기';
-  });
-})();
-
 // ---------- Chat 전체화면 페이지(chat.html 전용) ----------
 // About/Career 채팅 페이지 전용 셸(Hero/Hint/기록/키보드 대응)은
 // data/chat-shell.js의 window.initYionChatShell()로 분리되었다.
