@@ -262,6 +262,7 @@ html[data-theme='interview'] :is(
     .assistant-widget,
     .chat-full,
     .chat-shell,
+    .chat-entry-card,
     .summary-card,
     .project-card-v2,
     .card-v2,
@@ -282,6 +283,13 @@ html[data-theme='interview'] :is(
   color: var(--color-text);
   border-color: var(--color-overlay-border);
   box-shadow: 0 10px 30px var(--color-shadow-soft);
+}
+
+/* .hero-panel(=YI:ON 컨테이너)도 --color-card를 쓰므로, 내부 선택 카드는
+   한 단계 더 밝은 --color-card-elevated로 배경 명도 차이를 준다 */
+html[data-theme='interview'] .chat-entry-card {
+  background: var(--color-card-elevated);
+  border-color: var(--color-border);
 }
 
 html[data-theme='interview'] :is(
